@@ -1,25 +1,23 @@
 - hosts: all
-  become: yes
-  connection: local
   tasks:
-  - name: apt update
-    apt:
-      update_cache: "yes"
-  - name: nginx install
-    apt:
-      name: nginx
-      state: present
-  - name: update config
-    template:
-      src: ./nginx-default.template
-      dest: /etc/nginx/sites-available/default
-      owner: root
-      group: root
-  - name: nginx.service restart
-    service:
-      name: nginx.service
-      daemon_reload: yes
-      state: restarted
-      enabled: yes
+    - name: apt update
+      apt:
+        update_cache: "yes"
+    - name: nginx install
+      apt:
+        name: nginx
+        state: present
+    - name: update config
+      copy:
+        src: ./nginx-default.template
+        dest: /etc/nginx/sites-available/default
+        owner: root
+        group: root
+    - name: nginx.service restart
+      service:
+        name: nginx.service
+        daemon_reload: yes
+        state: restarted
+        enabled: yes
   vars:
     port_num: 8080
